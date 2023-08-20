@@ -159,22 +159,19 @@ function endInfo({ image, name, quantity, type, price, description }) { //Imprim
 }
 //Imprime en el Dom el formulario de entradas y salidas
 const formIO = `
-<div>
-  <br>
-  <h2>Ingrese su cantidad de entradas y salidas</h2>
-  <form id="form">
-        <label for="diInputs">Entradas (0-256):</label><br>
-        <input type="number" id="diInputs" name="diInputs" min="0" max="256" value="0"><br>
-        <label for="diPoints">Puntos (8, 16, 32):</label><br>
-        <input type="number" id="diPoints" name="diPoints" min="8" max="32" value="8"><br><br>
-        <label for="doOutputs">Salidas (0-256):</label><br>
-        <input type="number" id="doOutputs" name="doOutputs" min="0" max="256" value="0"><br>
-        <label for="doPoints">Puntos (8, 16, 32):</label><br>
-        <input type="number" id="doPoints" name="doPoints" min="8" max="32" value="8"><br><br>
+  <h2 class="formContainer__tittle">Ingrese su cantidad de entradas y salidas</h2>
+  <form id="form" class="formContainer__form">
+        <label for="diInputs" class="formContainer__form-label">Entradas (0-256):</label>
+        <input type="number" id="diInputs" class="formContainer__form-input" name="diInputs" min="0" max="256" value="0">
+        <label for="diPoints" class="formContainer__form-label">Puntos (8, 16, 32):</label>
+        <input type="number" id="diPoints" class="formContainer__form-input" name="diPoints" min="8" max="32" value="8">
+        <label for="doOutputs" class="formContainer__form-label">Salidas (0-256):</label>
+        <input type="number" id="doOutputs" class="formContainer__form-input" name="doOutputs" min="0" max="256" value="0">
+        <label for="doPoints" class="formContainer__form-label">Puntos (8, 16, 32):</label>
+        <input type="number" id="doPoints" class="formContainer__form-input" name="doPoints" min="8" max="32" value="8">
         
   </form>
-  <button class="btn btn-primary" id="sendIO">Confirmar IO</button>
-</div>
+  <button id="sendIO" class="formContainer__button">Confirmar IO</button>
 `;
 
 //Traemos toda la informacion del localStorage
@@ -264,6 +261,7 @@ function selectPlc(producto) {
   plcSelected = JSON.stringify(producto)
   localStorage.setItem("plc", plcSelected)
   formWeb = document.createElement('div');
+  formWeb.className = 'formContainer';
   formWeb.innerHTML = formIO
   productCards.append(formWeb)
   form = document.getElementById("form")
