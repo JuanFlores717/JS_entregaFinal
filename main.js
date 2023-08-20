@@ -46,8 +46,18 @@ function totalPrice(arr) {  //Funcion para calcular el precio de todo el carrito
 }
 
 function eraseAllLocalStorage() {  //borrar todo el localStorage
-  localStorage.clear();
-  location.reload();
+  Swal.fire({
+    title: '¿Estás seguro de querer volver a empezar?',
+    showCancelButton: true,
+    confirmButtonText: 'Si',
+    cancelButtonText: 'No',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      localStorage.clear();
+      location.reload();
+    }
+  })
+
 }
 
 // Inicializacion de variables globales: 
