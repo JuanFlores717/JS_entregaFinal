@@ -1,9 +1,9 @@
 //Funciones de uso específico
-function agregarAlCarrito(producto) { //funcion para agregar al carrito, busca que exista el item y luego le suma 1 a cantidad, además lo guarda en el localStorage
-  let searchCarr = carrito.some((el) => el.id === producto.id)
-  searchCarr ? (producto.quantity += 1) : (producto.quantity += 1, carrito.push(producto))
-  carritoStore = JSON.stringify(carrito)
-  localStorage.setItem("carrito", carritoStore)
+function addToCart(product) { //funcion para agregar al carrito, busca que exista el item y luego le suma 1 a cantidad, además lo guarda en el localStorage
+  let searchCarr = shoppingCart.some((el) => el.id === product.id)
+  searchCarr ? (product.quantity += 1) : (product.quantity += 1, shoppingCart.push(product))
+  shoppingCartStorage = JSON.stringify(shoppingCart)
+  localStorage.setItem("shoppingCart", shoppingCartStorage)
 }
 
 function fixIoQuantity(quantity) { //funcion para filtrar valores erroneos en la cantidad de entradas o salidas
@@ -21,7 +21,7 @@ function addModule(arr, company, quantity, points, type) {
   const quantityMod = calculateQuant(quantity, points)
 
   for (let i = 0; i < quantityMod; i++) {
-    agregarAlCarrito(findMod)
+    addToCart(findMod)
   }
 }
 function calculateQuant(quantity, points) { //Funcion para calcular la cantidad de modulos necesarios para cumplir con lo ingresado por el usuario
@@ -64,9 +64,9 @@ function eraseAllLocalStorage() {  //borrar todo el localStorage
 let companyData
 let allHardware
 let productCards = document.getElementById("jscontainer");
-let preferencia
-let plcBuscados
-let carrito = []
+let preference
+let searchedPLC
+let shoppingCart = []
 let companySelected
 let form
 let formWeb
@@ -178,9 +178,9 @@ const formIO = `
 companySelected = JSON.parse(localStorage.getItem("company"))
 plcSelected = JSON.parse(localStorage.getItem("plc"))
 formIoData = JSON.parse(localStorage.getItem("ioSelected"))
-let carritoStore = JSON.parse(localStorage.getItem("carrito"))
-if (carritoStore !== null) {
-  carrito = carritoStore
+let shoppingCartStorage = JSON.parse(localStorage.getItem("shoppingCart"))
+if (shoppingCartStorage !== null) {
+  shoppingCart = shoppingCartStorage
 }
 
 //Armamos un index para determinar en donde se quedo el usuario la ultima vez
@@ -193,12 +193,12 @@ function initProgram() {
   allPlc = allHardware.filter((el) => el.type === "Plc");
   allModules = allHardware.filter((el) => el.type === "Modulo");
 
-  if (stepIndex >= 3) { //comparacion para traernos la preferencia seleccionada
-    preferencia = companySelected.name
+  if (stepIndex >= 3) { //comparacion para traernos la preference seleccionada
+    preference = companySelected.name
   }
   switch (stepIndex) {  //Usando el index previamente creado decidimos que imprimir en el Dom
     case 7:
-      createIoData(allModules, preferencia, formIoData[0])
+      createIoData(allModules, preference, formIoData[0])
       break;
     case 3:
       selectPlc(plcSelected)
@@ -220,17 +220,17 @@ function generateCompanies() {   //funcion que genera las tarjetas de seleccion 
     const cardHTML = document.createElement('div');
     cardHTML.innerHTML = companyCatalog(companyData[i])
     companyContainer.append(cardHTML)
-    const botonParaSelec = document.getElementById(`${companyData[i].id}`);
-    botonParaSelec.addEventListener('click', () => selectCompany(companyData[i]));
+    const buttonToSelect = document.getElementById(`${companyData[i].id}`);
+    buttonToSelect.addEventListener('click', () => selectCompany(companyData[i]));
   }
 }
 
 //2do paso crear tarjetas de seleccion de PLC. En caso de haberse seleccionado previamente lo vamos a obviar
 function selectCompany(selCom) {
-  preferencia = selCom.name
+  preference = selCom.name
   companySelected = JSON.stringify(selCom)
   localStorage.setItem("company", companySelected)
-  plcBuscados = allHardware.filter((el) => el.company === preferencia && el.type === "Plc")
+  searchedPLC = allHardware.filter((el) => el.company === preference && el.type === "Plc")
   if (typeof companyContainer !== "undefined") { //Eliminamos del Dom las tarjetas de seleccion de marca porque ya seleccionamos una, el if es para evitar que cuando el usuario recargue la web quiera volver a eliminar algo que ya no está
     companyContainer.remove();
   }
@@ -238,27 +238,26 @@ function selectCompany(selCom) {
   plcContainer = document.createElement('div');
   plcContainer.className = 'plcContainer';
   productCards.append(plcContainer)
-  for (let i = 0; i < plcBuscados.length; i++) {
+  for (let i = 0; i < searchedPLC.length; i++) {
 
     const itemsCards = document.createElement('div');
-    itemsCards.innerHTML = plcCatalog(plcBuscados[i])
+    itemsCards.innerHTML = plcCatalog(searchedPLC[i])
     plcContainer.append(itemsCards)
 
-    const botonParaAgregar = document.getElementById(`${plcBuscados[i].id}`);
-    botonParaAgregar.addEventListener('click', () => selectPlc(plcBuscados[i]));
+    const buttonToAdd = document.getElementById(`${searchedPLC[i].id}`);
+    buttonToAdd.addEventListener('click', () => selectPlc(searchedPLC[i]));
 
   }
 
 }
 
 //3er paso crear formulario de IO, donde usuario ingresa cantidad de entradas y salidas. En caso de haberse completado previamente lo vamos a obviar
-function selectPlc(producto) {
-  agregarAlCarrito(producto)
-  const plcCard = document.getElementsByClassName("card")
+function selectPlc(product) {
+  addToCart(product)
   if (typeof plcContainer !== "undefined") { //Eliminamos del Dom las tarjetas de seleccion de PLC porque ya seleccionamos una, el if es para evitar que cuando el usuario recargue la web quiera volver a eliminar algo que ya no está
     plcContainer.remove();
   }
-  plcSelected = JSON.stringify(producto)
+  plcSelected = JSON.stringify(product)
   localStorage.setItem("plc", plcSelected)
   formWeb = document.createElement('div');
   formWeb.className = 'formContainer';
@@ -282,7 +281,7 @@ function sendIoData() {
   localStorage.setItem("ioSelected", IoSelected)
   formWeb.remove()
   plcSelected = JSON.parse(plcSelected)
-  createIoData(allModules, preferencia, formIoData[0])
+  createIoData(allModules, preference, formIoData[0])
 }
 
 function createIoData(arr, company, { quantitydi, diPoints, quantitydo, doPoints }) {
@@ -291,12 +290,12 @@ function createIoData(arr, company, { quantitydi, diPoints, quantitydo, doPoints
   const endContainer = document.createElement('div');
   endContainer.className = 'endContainer';
   productCards.append(endContainer)
-  for (let i = 0; i < carrito.length; i++) {
+  for (let i = 0; i < shoppingCart.length; i++) {
     const itemsCards = document.createElement('div');
-    itemsCards.innerHTML = endInfo(carrito[i])
+    itemsCards.innerHTML = endInfo(shoppingCart[i])
     endContainer.append(itemsCards)
   }
-  const totalP = totalPrice(carrito)
+  const totalP = totalPrice(shoppingCart)
   const totalPrint = document.createElement('div');
   totalPrint.className = 'endPrint';
   totalPrint.innerHTML = `
