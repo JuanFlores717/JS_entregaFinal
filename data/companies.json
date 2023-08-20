@@ -1,0 +1,26 @@
+[
+    {
+      "id": 10000,
+      "name": "Siemens",
+      "description": "¡La mejor marca para su automatismo!",
+      "protocol": ["Modbus", " Profinet", " RS-485 ", " Ethernet"],
+      "target": "grandes proyectos",
+      "image": "./assets/images/logo_siemens.png"
+    },
+    {
+      "id": 10002,
+      "name": "Delta",
+      "description": "¡La mejor marca para su automatismo!",
+      "protocol": ["Modbus", " RS-485", " Ethernet"],
+      "target": "pequeños proyectos",
+      "image": "./assets/images/logo_delta.jpg"
+    },
+    {
+      "id": 10003,
+      "name": "Ge",
+      "description": "¡La mejor marca para su automatismo!",
+      "protocol": ["Modbus", " RS-485", " Ethernet"],
+      "target": "Grandes y Pequeños proyectos",
+      "image": "./assets/images/logo_ge.png"
+    }
+  ]
